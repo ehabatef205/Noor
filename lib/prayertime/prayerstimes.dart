@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:adhan/adhan.dart';
+import 'package:noor/colors.dart';
+import 'dart:ui' as ui;
 
 class prayertimes extends StatefulWidget {
   @override
@@ -72,7 +74,7 @@ class _prayertimesState extends State<prayertimes> {
           second = maghrib.difference(now).inSeconds % 60;
           minute = maghrib.difference(now).inMinutes % 60;
           hours = maghrib.difference(now).inHours;
-        }else if (isha.isAfter(DateTime.now())) {
+        } else if (isha.isAfter(DateTime.now())) {
           setState(() {
             nextPrayer = "العشاء";
           });
@@ -101,124 +103,108 @@ class _prayertimesState extends State<prayertimes> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: whiteColor,
-      body: Container(
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/a.jpg"),
-                      fit: BoxFit.fill)),
-            ),
-            Container(
-              child: ListView(
+    return Directionality(
+      textDirection: ui.TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "مواعيد الصلاة",
+            style: TextStyle(
+                fontFamily: "MO_Nawel",
+                fontSize: height * .05,
+                color: whiteColor),
+          ),
+          centerTitle: true,
+          backgroundColor: backColor,
+        ),
+        backgroundColor: backColor,
+        body: Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: height * .04,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "مواعيد الصلاة",
-                        style: TextStyle(
-                            fontFamily: "MO_Nawel",
-                            fontSize: height * .05,
-                            color: whiteColor),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: height * .04,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: height * .095,
-                        width: width * .7,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue.withOpacity(.2)),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "باقي على صلاة $nextPrayer",
-                                  style: TextStyle(
-                                      fontFamily: "MO_Nawel",
-                                      fontSize: height * .03,
-                                      color: whiteColor),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text.rich(TextSpan(children: [
-                                  TextSpan(
-                                    text: hours < 10 ? "0$hours:" : "$hours:",
-                                    style: TextStyle(
-                                        fontFamily: "MO_Nawel",
-                                        fontSize: height * .03,
-                                        color: whiteColor),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        minute < 10 ? "0$minute:" : "$minute:",
-                                    style: TextStyle(
-                                        fontFamily: "MO_Nawel",
-                                        fontSize: height * .03,
-                                        color: whiteColor),
-                                  ),
-                                  TextSpan(
-                                    text: second < 10 ? "0$second" : "$second",
-                                    style: TextStyle(
-                                        fontFamily: "MO_Nawel",
-                                        fontSize: height * .03,
-                                        color: whiteColor),
-                                  )
-                                ])),
-                              )
-                            ],
+                  Container(
+                    height: height * .095,
+                    width: width * .7,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white.withOpacity(.1)),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "باقي على صلاة $nextPrayer",
+                              style: TextStyle(
+                                  fontFamily: "MO_Nawel",
+                                  fontSize: height * .03,
+                                  color: whiteColor),
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            child: Text.rich(TextSpan(children: [
+                              TextSpan(
+                                text: hours < 10 ? "0$hours:" : "$hours:",
+                                style: TextStyle(
+                                    fontFamily: "MO_Nawel",
+                                    fontSize: height * .03,
+                                    color: whiteColor),
+                              ),
+                              TextSpan(
+                                text: minute < 10 ? "0$minute:" : "$minute:",
+                                style: TextStyle(
+                                    fontFamily: "MO_Nawel",
+                                    fontSize: height * .03,
+                                    color: whiteColor),
+                              ),
+                              TextSpan(
+                                text: second < 10 ? "0$second" : "$second",
+                                style: TextStyle(
+                                    fontFamily: "MO_Nawel",
+                                    fontSize: height * .03,
+                                    color: whiteColor),
+                              )
+                            ])),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: height * .02,
-                  ),
-                  singlePrayerTime(context, "الفجر", getTodayFajrTime),
-                  SizedBox(
-                    height: height * .02,
-                  ),
-                  singlePrayerTime(context, "الشروق", getTodaySunriseTime),
-                  SizedBox(
-                    height: height * .02,
-                  ),
-                  singlePrayerTime(context, "الظهر", getTodayDhuhrTime),
-                  SizedBox(
-                    height: height * .02,
-                  ),
-                  singlePrayerTime(context, "العصر", getTodayAsrTime),
-                  SizedBox(
-                    height: height * .02,
-                  ),
-                  singlePrayerTime(context, "المغرب", getTodayMaghribTime),
-                  SizedBox(
-                    height: height * .02,
-                  ),
-                  singlePrayerTime(context, "العشاء", getTodayIshaTime),
-                  SizedBox(
-                    height: height * .02,
+                    ),
                   ),
                 ],
               ),
-            )
-          ],
+              SizedBox(
+                height: height * .02,
+              ),
+              singlePrayerTime(context, "الفجر", getTodayFajrTime),
+              SizedBox(
+                height: height * .02,
+              ),
+              singlePrayerTime(context, "الشروق", getTodaySunriseTime),
+              SizedBox(
+                height: height * .02,
+              ),
+              singlePrayerTime(context, "الظهر", getTodayDhuhrTime),
+              SizedBox(
+                height: height * .02,
+              ),
+              singlePrayerTime(context, "العصر", getTodayAsrTime),
+              SizedBox(
+                height: height * .02,
+              ),
+              singlePrayerTime(context, "المغرب", getTodayMaghribTime),
+              SizedBox(
+                height: height * .02,
+              ),
+              singlePrayerTime(context, "العشاء", getTodayIshaTime),
+              SizedBox(
+                height: height * .02,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -235,12 +221,25 @@ class _prayertimesState extends State<prayertimes> {
           height: height * .08,
           width: width * .9,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.blue.withOpacity(.2)),
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white.withOpacity(.1),
+          ),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      prayerTime,
+                      style: TextStyle(
+                          fontFamily: "MO_Nawel",
+                          fontSize: height * .03,
+                          color: whiteColor),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: Container(
                     alignment: Alignment.center,
@@ -263,18 +262,6 @@ class _prayertimesState extends State<prayertimes> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      prayerTime,
-                      style: TextStyle(
-                          fontFamily: "MO_Nawel",
-                          fontSize: height * .03,
-                          color: whiteColor),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -293,7 +280,7 @@ class _prayertimesState extends State<prayertimes> {
     final nyParams = CalculationMethod.egyptian.getParameters();
     nyParams.madhab = Madhab.shafi;
     final nyPrayerTimes =
-    PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
+        PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
     fajr = await nyPrayerTimes.fajr;
     return await nyPrayerTimes.fajr;
   }
@@ -308,7 +295,7 @@ class _prayertimesState extends State<prayertimes> {
     final nyParams = CalculationMethod.egyptian.getParameters();
     nyParams.madhab = Madhab.shafi;
     final nyPrayerTimes =
-    PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
+        PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
     sunrise = await nyPrayerTimes.sunrise;
     return await nyPrayerTimes.sunrise;
   }
@@ -323,7 +310,7 @@ class _prayertimesState extends State<prayertimes> {
     final nyParams = CalculationMethod.egyptian.getParameters();
     nyParams.madhab = Madhab.shafi;
     final nyPrayerTimes =
-    PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
+        PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
     dhuhr = await nyPrayerTimes.dhuhr.subtract(Duration(minutes: 1));
     return await nyPrayerTimes.dhuhr.subtract(Duration(minutes: 1));
   }
@@ -338,7 +325,7 @@ class _prayertimesState extends State<prayertimes> {
     final nyParams = CalculationMethod.egyptian.getParameters();
     nyParams.madhab = Madhab.shafi;
     final nyPrayerTimes =
-    PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
+        PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
     asr = await nyPrayerTimes.asr.subtract(Duration(minutes: 1));
     return await nyPrayerTimes.asr.subtract(Duration(minutes: 1));
   }
@@ -353,7 +340,7 @@ class _prayertimesState extends State<prayertimes> {
     final nyParams = CalculationMethod.egyptian.getParameters();
     nyParams.madhab = Madhab.shafi;
     final nyPrayerTimes =
-    PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
+        PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
     maghrib = await nyPrayerTimes.maghrib;
     return await nyPrayerTimes.maghrib;
   }
@@ -368,7 +355,7 @@ class _prayertimesState extends State<prayertimes> {
     final nyParams = CalculationMethod.egyptian.getParameters();
     nyParams.madhab = Madhab.shafi;
     final nyPrayerTimes =
-    PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
+        PrayerTimes(egypt, nyDate, nyParams, utcOffset: nyUtcOffset);
     isha = await nyPrayerTimes.isha;
     return await nyPrayerTimes.isha;
   }

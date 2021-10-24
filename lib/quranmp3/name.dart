@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:noor/colors.dart';
 
 import 'quranmp3.dart';
 
@@ -77,59 +78,56 @@ class _nameState extends State<name> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          body: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/a.jpg"), fit: BoxFit.fill)),
-            child: Column(
-                children: [
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 35, bottom: 35, right: 15, left: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                        itemCount: _name.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              ListTile(
-                                title: Text(_name[index]["name"], style: TextStyle(color: Colors.white, fontSize: 18)),
-                                leading: Container(
-                                  height: height * 0.08,
-                                  width: width * 0.14,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(photo[index]))),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => quranmp3(
-                                              index + 1)));
-                                },
-                              ),
-                              Divider(
-                                color: Colors.grey,
-                                indent: 10,
-                                endIndent: 10,
-                                thickness: 1,
-                              )
-                            ],
-                          );
-                        }),
-                  ),
-                ),
-              )
-            ]),
+          appBar: AppBar(
+            backgroundColor: backColor,
+            title: Text(
+              "أختر الشيخ",
+              style: TextStyle(
+                fontFamily: "MO_Nawel",
+                fontSize: 30,
+              ),
+            ),
+            centerTitle: true,
+          ),
+          backgroundColor: backColor,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: _name.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        title: Text(_name[index]["name"],
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 18)),
+                        leading: Container(
+                          height: height * 0.08,
+                          width: width * 0.14,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(photo[index]))),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => quranmp3(index + 1)));
+                        },
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        indent: 10,
+                        endIndent: 10,
+                        thickness: 1,
+                      )
+                    ],
+                  );
+                }),
           )),
     );
   }

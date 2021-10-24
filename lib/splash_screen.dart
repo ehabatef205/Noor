@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noor/movePages.dart';
+import 'package:noor/move_pages.dart';
 
 class splashScreen extends StatefulWidget {
   _splashScreenState createState() => _splashScreenState();

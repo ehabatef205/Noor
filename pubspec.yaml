@@ -58,6 +58,7 @@ dependencies:
   synchronized: any
   native_pdf_renderer: any
   intl: any
+  marquee: any
 
 dev_dependencies:
   flutter_test:

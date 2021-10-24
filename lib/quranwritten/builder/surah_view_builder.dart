@@ -1,6 +1,7 @@
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:noor/colors.dart';
 import 'package:noor/quranwritten/builder/models/bookmarkedPage.dart';
 import 'package:noor/quranwritten/builder/utilities/helper.dart';
 import 'package:noor/quranwritten/pdf_view_native.dart';
@@ -162,107 +163,80 @@ class _SurahViewBuilderState extends State<SurahViewBuilder> {
             context, MaterialPageRoute(builder: (context) => quranList()));
       },
       child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/a.jpg"), fit: BoxFit.fill)),
-          child: FutureBuilder<PdfDocument>(
-            future: _getDocument(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return SafeArea(
-                  child: PDFView.builder(
-                    scrollDirection: Axis.horizontal,
-                    document: snapshot.data,
-                    controller: pageController,
-                    builder: (PdfPageImage pageImage, bool isCurrentIndex) {
-                      currentPage = pageImage.pageNumber;
-                      globals.currentPage = currentPage;
-                      bookmarkedPagesList[0].continueReader = currentPage;
-                      _save1();
+        backgroundColor: backColor,
+        body: FutureBuilder<PdfDocument>(
+          future: _getDocument(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SafeArea(
+                child: PDFView.builder(
+                  scrollDirection: Axis.horizontal,
+                  document: snapshot.data,
+                  controller: pageController,
+                  builder: (PdfPageImage pageImage, bool isCurrentIndex) {
+                    currentPage = pageImage.pageNumber;
+                    globals.currentPage = currentPage;
+                    bookmarkedPagesList[0].continueReader = currentPage;
+                    _save1();
 
-                      /// Update lastViewedPage
-                      setLastViewedPage(currentPage);
+                    /// Update lastViewedPage
+                    setLastViewedPage(currentPage);
 
-                      if (currentPage == globals.bookmarkedPage) {
-                        isBookmarked = true;
-                      } else {
-                        isBookmarked = false;
-                      }
-                      print("$isBookmarked:$currentPage");
+                    if (currentPage == globals.bookmarkedPage) {
+                      isBookmarked = true;
+                    } else {
+                      isBookmarked = false;
+                    }
+                    print("$isBookmarked:$currentPage");
 
-                      if (isBookmarked) {
-                        _bookmarkWidget = Bookmark();
-                      } else {
-                        _bookmarkWidget = Container();
-                      }
+                    if (isBookmarked) {
+                      _bookmarkWidget = Bookmark();
+                    } else {
+                      _bookmarkWidget = Container();
+                    }
 
-                      Widget image = Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          Container(
-                            child: ExtendedImage.memory(
-                              pageImage.bytes,
-                              // gesture not applied (minScale,maxScale,speed...)
-                              mode: ExtendedImageMode.gesture,
-                              initGestureConfigHandler: (_) => GestureConfig(
-                                //minScale: 1,
-                                // animationMinScale:1,
-                                // maxScale: 1.1,
-                                //animationMaxScale: 1,
-                                speed: 1,
-                                inertialSpeed: 100,
-                                //inPageView: true,
-                                initialScale: 1,
-                                cacheGesture: false,
-                              ),
-                              onDoubleTap: (ExtendedImageGestureState state) {
-                                final pointerDownPosition =
-                                    state.pointerDownPosition;
-                                final begin = state.gestureDetails.totalScale;
-                                double end;
-                                if (begin == _doubleTapScales[0]) {
-                                  end = _doubleTapScales[1];
-                                } else {
-                                  end = _doubleTapScales[0];
-                                }
-                                state.handleDoubleTap(
-                                  scale: end,
-                                  doubleTapPosition: pointerDownPosition,
-                                );
-                              },
-                            ),
+                    Widget image = Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        Container(
+                          child: ExtendedImage.memory(
+                            pageImage.bytes,
+                            // gesture not applied (minScale,maxScale,speed...)
+                            mode: ExtendedImageMode.gesture,
+                            scale: 1.5,
+                            fit: BoxFit.fill,
                           ),
-                          isBookmarked == true ? _bookmarkWidget : Container(),
-                        ],
+                        ),
+                        isBookmarked == true ? _bookmarkWidget : Container(),
+                      ],
+                    );
+                    if (isCurrentIndex) {
+                      //currentPage=pageImage.pageNumber.round().toInt();
+                      image = Hero(
+                        tag: pageImage.pageNumber.toString(),
+                        child: Container(child: image),
+                        transitionOnUserGestures: true,
                       );
-                      if (isCurrentIndex) {
-                        //currentPage=pageImage.pageNumber.round().toInt();
-                        image = Hero(
-                          tag: pageImage.pageNumber.toString(),
-                          child: Container(child: image),
-                          transitionOnUserGestures: true,
-                        );
-                      }
-                      return image;
-                    },
-                    onPageChanged: (page) {},
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    'المعذرة لا يمكن طباعة المحتوى'
-                    'يرجي التحقق من أن جهازك يدعم نظام أندرويد بنسخته 5 على الأقل',
-                  ),
-                );
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
+                    }
+                    return image;
+                  },
+                  onPageChanged: (page) {},
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  'المعذرة لا يمكن طباعة المحتوى'
+                  'يرجي التحقق من أن جهازك يدعم نظام أندرويد بنسخته 5 على الأقل',
+                ),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: backColor,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
@@ -274,7 +248,8 @@ class _SurahViewBuilderState extends State<SurahViewBuilder> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.grey[600],
+          selectedItemColor: Colors.teal,
+          unselectedItemColor: Colors.teal,
           selectedFontSize: 12,
           onTap: (index) => _onItemTapped(index),
         ),

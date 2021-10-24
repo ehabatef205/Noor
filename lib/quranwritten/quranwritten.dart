@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noor/movePages.dart';
+import 'package:noor/colors.dart';
+import 'package:noor/move_pages.dart';
 import 'package:noor/quranwritten/builder/models/bookmarkedPage.dart';
 import 'package:noor/quranwritten/builder/utilities/helper.dart';
 import 'dart:convert';
@@ -8,8 +9,8 @@ import 'package:screen/screen.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'entity/Surah.dart';
-import 'builder/SurahListBuilder.dart';
-import 'builder/SurahViewBuilder.dart';
+import 'builder/surah_list_builder.dart';
+import 'builder/surah_view_builder.dart';
 
 class quranList extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class quranList extends StatefulWidget {
 
 class _quranListState extends State<quranList> {
 
-  SQLHelper helper = new SQLHelper();
+  SQLHelper helper = SQLHelper();
   List<BookmarkedPage> bookmarkedPagesList;
   int count = 0;
 
@@ -85,7 +86,7 @@ class _quranListState extends State<quranList> {
     Screen.keepOn(true);
 
     if (bookmarkedPagesList == null) {
-      bookmarkedPagesList = new List<BookmarkedPage>();
+      bookmarkedPagesList = List<BookmarkedPage>();
       updateListView();
     }
 
@@ -115,22 +116,23 @@ class _quranListState extends State<quranList> {
               textDirection: TextDirection.rtl,
 
               /// Use future builder and DefaultAssetBundle to load the local JSON file
-              child: new FutureBuilder(
+              child: FutureBuilder(
                   future: DefaultAssetBundle.of(context)
                       .loadString('assets/json/surah.json'),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       List<Surah> surahList = parseJson(snapshot.data.toString());
                       return surahList.isNotEmpty
-                          ? new SurahListBuilder(surah: surahList)
-                          : new Center(child: new CircularProgressIndicator());
+                          ? SurahListBuilder(surah: surahList)
+                          : Center(child: CircularProgressIndicator());
                     } else {
-                      return new Center(child: new CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator());
                     }
                   }),
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: backColor,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.book),
@@ -142,7 +144,8 @@ class _quranListState extends State<quranList> {
               ),
             ],
             currentIndex: _selectedIndex,
-            selectedItemColor: Colors.grey[600],
+            selectedItemColor: Colors.teal,
+            unselectedItemColor: Colors.teal,
             selectedFontSize: 12,
             onTap: (index) => _onItemTapped(index),
           ),
@@ -156,7 +159,7 @@ class _quranListState extends State<quranList> {
     }
     final parsed =
         json.decode(response.toString()).cast<Map<String, dynamic>>();
-    return parsed.map<Surah>((json) => new Surah.fromJson(json)).toList();
+    return parsed.map<Surah>((json) => Surah.fromJson(json)).toList();
   }
 
   void _save() async {

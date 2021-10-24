@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:arabic_numbers/arabic_numbers.dart';
+import 'package:marquee/marquee.dart';
+import 'package:noor/colors.dart';
 import 'package:noor/counter/utilities/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'models/masbah.dart';
 
 class Counter extends StatefulWidget {
-
   @override
   _CounterState createState() => _CounterState();
 }
@@ -32,181 +33,181 @@ class _CounterState extends State<Counter> {
       updateListView();
     }
 
-
-
-    Future.delayed(Duration(seconds: 1), (){
-      if(countsList.length == 0){
+    Future.delayed(Duration(seconds: 1), () {
+      if (countsList.length == 0) {
         setState(() {
           _count = Count(0);
           _save();
         });
         updateListView();
       }
-      try{
+      try {
         setState(() {
           counter = countsList[0].counter;
         });
-      }catch (Ex){
-
-      }
+      } catch (Ex) {}
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     double height = MediaQuery.of(context).size.height;
 
     double width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: whiteColor,
-      endDrawer: Drawer(),
-      body: Container(
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/a.jpg"), fit: BoxFit.fill)),
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  height: height * .17,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: backColor,
+          title: Text("مسبحة الكترونية",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+                fontFamily: "MO_Nawel",
+              )),
+        ),
+        backgroundColor: backColor,
+        body: Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  height: 50,
+                  child: Marquee(
+                    text: "نرجو الدعاء وقراءة الفاتحة على روح نورا حسني",
+                    blankSpace: 20,
+                    velocity: 40,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-//(1)upper container
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: height * .09,
-                      width: width * .5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: height * .09,
+                    width: width * .5,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white.withOpacity(.2)),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white.withOpacity(.1),
+                    ),
+                    child: Center(
+                      child: Text(
+                        counter.toString(),
+                        style: TextStyle(
+                            fontFamily: "digital-7",
+                            fontSize: 30,
+                            color: whiteColor),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: height * .04,
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 30),
+                child: InkWell(
+                  customBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Container(
+                    height: height * .08,
+                    width: height * .08,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(.2),
+                        shape: BoxShape.circle),
+                    child: Center(
+                        child: Text("إعادة",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: "MO_Nawel",
+                            ))),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      counter = 0;
+                      countsList[0].counter = 0;
+                      _save1();
+                    });
+                  },
+                ),
+              ),
+              SizedBox(
+                height: height * .01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(height * .2),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        counter++;
+                        countsList[0].counter = countsList[0].counter + 1;
+                        _save1();
+                      });
+                    },
+                    child: Container(
+                      height: height * .4,
+                      width: width * .8,
                       decoration: BoxDecoration(
-                        border: Border.all(color:Colors.blue.withOpacity(.5)),
-                        borderRadius: BorderRadius.circular(10),
-                        color:Colors.blue.withOpacity(.2),
-                      ),
-                      child: Center(
-                        child: Text(
-                          counter.toString(),
-                          style: TextStyle(
-                              fontFamily: "digital-7",
-                              fontSize: 30,
-                              color: whiteColor),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: height * .04,
-                ),
-// (2) reset button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: width * .1,
-                      ),
+                          color: Colors.white.withOpacity(.3),
+                          shape: BoxShape.circle),
                     ),
-                    Expanded(
-                      child: InkWell(
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Container(
-                          height: height * .08,
-                          width: height * .08,
-                          decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(.5), shape: BoxShape.circle),
-                          child: Center(child: Text("إعادة", style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: "MO_Nawel",))),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            counter = 0;
-                            countsList[0].counter = 0;
-                            _save1();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: height * .01,
-                ),
-//  (3) main button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(120),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            counter++;
-                            countsList[0].counter = countsList[0].counter + 1;
-                            _save1();
-                          });
-                        },
-                        child: Container(
-                          height: height * .4,
-                          width: width * .8,
-                          decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(.5), shape: BoxShape.circle),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: height * .04,
-                ),
-//(4) language and total row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: height * .04,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
                       child: Container(
-                        alignment: Alignment.center,
-                        child: Text.rich(TextSpan(children: [
-                          TextSpan(
-                            text: "مجموع التسبيحات: ",
-                            style: TextStyle(
-                                fontFamily: "MO_Nawel",
-                                fontSize: height * .03,
-                                color: whiteColor),
-                          ),
-                          TextSpan(
-                            text: "${counter.toString()}",
-                            style: TextStyle(
-                                fontFamily: "digital-7",
-                                fontSize: height * .03,
-                                color: whiteColor),
-                          ),
-                        ])),
-                      )
-                    ),
-                  ],
-                )
-              ],
-            )
-          ],
+                    alignment: Alignment.center,
+                    child: Text.rich(TextSpan(children: [
+                      TextSpan(
+                        text: "مجموع التسبيحات: ",
+                        style: TextStyle(
+                            fontFamily: "MO_Nawel",
+                            fontSize: height * .03,
+                            color: whiteColor),
+                      ),
+                      TextSpan(
+                        text: "${counter.toString()}",
+                        style: TextStyle(
+                            fontFamily: "digital-7",
+                            fontSize: height * .03,
+                            color: whiteColor),
+                      ),
+                    ])),
+                  )),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _save() async {
-
     int result;
     if (_count.id == null) {
       result = await helper.insertCount(_count);
@@ -216,7 +217,6 @@ class _CounterState extends State<Counter> {
   }
 
   void _save1() async {
-
     int result;
     if (countsList[0].id == null) {
       result = await helper.insertCount(countsList[0]);
