@@ -1,7 +1,6 @@
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:noor/colors.dart';
 import 'package:noor/quranwritten/builder/models/bookmarkedPage.dart';
 import 'package:noor/quranwritten/builder/utilities/helper.dart';
 import 'package:noor/quranwritten/pdf_view_native.dart';
@@ -140,10 +139,11 @@ class _SurahViewBuilderState extends State<SurahViewBuilder> {
       updateListView();
     }
 
-    Future.delayed(Duration(seconds: 1), (){
-      if(bookmarkedPagesList.length == 0){
+    Future.delayed(Duration(seconds: 1), () {
+      if (bookmarkedPagesList.length == 0) {
         setState(() {
-          _bookmarkedPage = BookmarkedPage(globals.DEFAULT_BOOKMARKED_PAGE, globals.DEFAULT_BOOKMARKED_PAGE);
+          _bookmarkedPage = BookmarkedPage(
+              globals.DEFAULT_BOOKMARKED_PAGE, globals.DEFAULT_BOOKMARKED_PAGE);
           _save();
         });
         updateListView();
@@ -155,6 +155,8 @@ class _SurahViewBuilderState extends State<SurahViewBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     pageController = _pageControllerBuilder();
     return WillPopScope(
       // ignore: missing_return
@@ -162,96 +164,124 @@ class _SurahViewBuilderState extends State<SurahViewBuilder> {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => quranList()));
       },
-      child: Scaffold(
-        backgroundColor: backColor,
-        body: FutureBuilder<PdfDocument>(
-          future: _getDocument(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return SafeArea(
-                child: PDFView.builder(
-                  scrollDirection: Axis.horizontal,
-                  document: snapshot.data,
-                  controller: pageController,
-                  builder: (PdfPageImage pageImage, bool isCurrentIndex) {
-                    currentPage = pageImage.pageNumber;
-                    globals.currentPage = currentPage;
-                    bookmarkedPagesList[0].continueReader = currentPage;
-                    _save1();
-
-                    /// Update lastViewedPage
-                    setLastViewedPage(currentPage);
-
-                    if (currentPage == globals.bookmarkedPage) {
-                      isBookmarked = true;
-                    } else {
-                      isBookmarked = false;
-                    }
-                    print("$isBookmarked:$currentPage");
-
-                    if (isBookmarked) {
-                      _bookmarkWidget = Bookmark();
-                    } else {
-                      _bookmarkWidget = Container();
-                    }
-
-                    Widget image = Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        Container(
-                          child: ExtendedImage.memory(
-                            pageImage.bytes,
-                            // gesture not applied (minScale,maxScale,speed...)
-                            mode: ExtendedImageMode.gesture,
-                            scale: 1.5,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        isBookmarked == true ? _bookmarkWidget : Container(),
-                      ],
-                    );
-                    if (isCurrentIndex) {
-                      //currentPage=pageImage.pageNumber.round().toInt();
-                      image = Hero(
-                        tag: pageImage.pageNumber.toString(),
-                        child: Container(child: image),
-                        transitionOnUserGestures: true,
-                      );
-                    }
-                    return image;
-                  },
-                  onPageChanged: (page) {},
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  'المعذرة لا يمكن طباعة المحتوى'
-                  'يرجي التحقق من أن جهازك يدعم نظام أندرويد بنسخته 5 على الأقل',
-                ),
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: backColor,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              title: Text('الإنتقال إلى العلامة'),
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/s.jpg"), fit: BoxFit.fill)),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: Container(),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_forward))
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark),
-              title: Text('حفظ العلامة'),
+            backgroundColor: Colors.transparent,
+            body: FutureBuilder<PdfDocument>(
+              future: _getDocument(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return SafeArea(
+                    child: PDFView.builder(
+                      scrollDirection: Axis.horizontal,
+                      document: snapshot.data,
+                      controller: pageController,
+                      builder: (PdfPageImage pageImage, bool isCurrentIndex) {
+                        currentPage = pageImage.pageNumber;
+                        globals.currentPage = currentPage;
+                        bookmarkedPagesList[0].continueReader = currentPage;
+                        _save1();
+
+                        /// Update lastViewedPage
+                        setLastViewedPage(currentPage);
+
+                        if (currentPage == globals.bookmarkedPage) {
+                          isBookmarked = true;
+                        } else {
+                          isBookmarked = false;
+                        }
+                        print("$isBookmarked:$currentPage");
+
+                        if (isBookmarked) {
+                          _bookmarkWidget = Bookmark();
+                        } else {
+                          _bookmarkWidget = Container();
+                        }
+
+                        Widget image = Stack(
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            Container(
+                              child: ExtendedImage.memory(
+                                pageImage.bytes,
+                                // gesture not applied (minScale,maxScale,speed...)
+                                mode: ExtendedImageMode.gesture,
+                                scale: 1.5,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            isBookmarked == true
+                                ? _bookmarkWidget
+                                : Container(),
+                          ],
+                        );
+                        if (isCurrentIndex) {
+                          //currentPage=pageImage.pageNumber.round().toInt();
+                          image = Hero(
+                            tag: pageImage.pageNumber.toString(),
+                            child: Container(child: image),
+                            transitionOnUserGestures: true,
+                          );
+                        }
+                        return image;
+                      },
+                      onPageChanged: (page) {},
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'المعذرة لا يمكن طباعة المحتوى'
+                      'يرجي التحقق من أن جهازك يدعم نظام أندرويد بنسخته 5 على الأقل',
+                    ),
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
             ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.teal,
-          unselectedItemColor: Colors.teal,
-          selectedFontSize: 12,
-          onTap: (index) => _onItemTapped(index),
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Colors.black,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.book),
+                  title: Text('الإنتقال إلى العلامة'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.bookmark),
+                  title: Text('حفظ العلامة'),
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.teal,
+              unselectedItemColor: Colors.teal,
+              selectedFontSize: 12,
+              onTap: (index) => _onItemTapped(index),
+            ),
+          ),
         ),
       ),
     );

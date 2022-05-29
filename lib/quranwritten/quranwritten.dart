@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:noor/colors.dart';
 import 'package:noor/move_pages.dart';
 import 'package:noor/quranwritten/builder/models/bookmarkedPage.dart';
 import 'package:noor/quranwritten/builder/utilities/helper.dart';
 import 'dart:convert';
 import 'package:noor/quranwritten/library/Globals.dart' as globals;
 import 'package:screen/screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'entity/Surah.dart';
@@ -18,7 +18,6 @@ class quranList extends StatefulWidget {
 }
 
 class _quranListState extends State<quranList> {
-
   SQLHelper helper = SQLHelper();
   List<BookmarkedPage> bookmarkedPagesList;
   int count = 0;
@@ -90,66 +89,85 @@ class _quranListState extends State<quranList> {
       updateListView();
     }
 
-    Future.delayed(Duration(seconds: 1), (){
-      if(bookmarkedPagesList.length == 0){
+    Future.delayed(Duration(seconds: 1), () {
+      if (bookmarkedPagesList.length == 0) {
         setState(() {
-          _bookmarkedPage = BookmarkedPage(globals.DEFAULT_BOOKMARKED_PAGE, globals.DEFAULT_BOOKMARKED_PAGE);
+          _bookmarkedPage = BookmarkedPage(
+              globals.DEFAULT_BOOKMARKED_PAGE, globals.DEFAULT_BOOKMARKED_PAGE);
           _save();
         });
         updateListView();
       }
     });
-
     super.initState();
   }
 
+  bool ramadan;
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return WillPopScope(
       // ignore: missing_return
       onWillPop: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => movePages()));
+        if (DateTime.now().isAfter(DateTime(2022, 04, 01, 00, 00, 00)) &&
+            DateTime.now().isBefore(DateTime(2022, 05, 01, 23, 59, 59))) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => movePages(
+                        ramadan: true,
+                      )));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => movePages(
+                        ramadan: false,
+                      )));
+        }
       },
       child: Scaffold(
-          body: Container(
-            child: Directionality(
-              textDirection: TextDirection.rtl,
+        body: Container(
+          child: Directionality(
+            textDirection: TextDirection.rtl,
 
-              /// Use future builder and DefaultAssetBundle to load the local JSON file
-              child: FutureBuilder(
-                  future: DefaultAssetBundle.of(context)
-                      .loadString('assets/json/surah.json'),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      List<Surah> surahList = parseJson(snapshot.data.toString());
-                      return surahList.isNotEmpty
-                          ? SurahListBuilder(surah: surahList)
-                          : Center(child: CircularProgressIndicator());
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  }),
-            ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: backColor,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.book),
-                title: Text('الإنتقال إلى العلامة'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chrome_reader_mode),
-                title: Text('مواصلة القراءة'),
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.teal,
-            unselectedItemColor: Colors.teal,
-            selectedFontSize: 12,
-            onTap: (index) => _onItemTapped(index),
+            /// Use future builder and DefaultAssetBundle to load the local JSON file
+            child: FutureBuilder(
+                future: DefaultAssetBundle.of(context)
+                    .loadString('assets/json/surah.json'),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Surah> surahList = parseJson(snapshot.data.toString());
+                    return surahList.isNotEmpty
+                        ? SurahListBuilder(surah: surahList)
+                        : Center(child: CircularProgressIndicator());
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
           ),
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.black,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              title: Text('الإنتقال إلى العلامة'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chrome_reader_mode),
+              title: Text('مواصلة القراءة'),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.teal,
+          unselectedItemColor: Colors.teal,
+          selectedFontSize: 12,
+          onTap: (index) => _onItemTapped(index),
+        ),
+      ),
     );
   }
 

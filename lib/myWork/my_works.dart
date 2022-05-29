@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:noor/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class myWorks extends StatefulWidget {
@@ -15,71 +14,87 @@ class _myWorksState extends State<myWorks> {
     double width = MediaQuery.of(context).size.width;
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: backColor,
-          title: Text("أعمالنا",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontFamily: "MO_Nawel",
-              )),
-        ),
-        backgroundColor: backColor,
-        body: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              Column(
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/s.jpg"), fit: BoxFit.fill)),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              title: Text("أعمالنا",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontFamily: "MO_Nawel",
+                  )),
+              elevation: 0,
+            ),
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: ListView(
+                shrinkWrap: true,
                 children: [
-                  FlatButton(
-                      child: Container(
-                          height: height * 0.15,
-                          width: width * 0.3,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage("assets/images/quicknote.png"),
-                                  fit: BoxFit.fill))),
-                      onPressed: _launchURL1),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Text("Quick Note",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            decoration: TextDecoration.none)),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: height * 0.05,
-              ),
-              Column(
-                children: [
-                  FlatButton(
-                      child: Container(
-                          height: height * 0.13,
-                          width: width * 0.4,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: AssetImage("assets/images/diamond.jpg"),
-                                  fit: BoxFit.fill))),
-                      onPressed: _launchURL2),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Text("Diamond",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            decoration: TextDecoration.none)),
+                  Column(
+                    children: [
+                      FlatButton(
+                          child: Container(
+                              height: height * 0.15,
+                              width: width * 0.3,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/quicknote.png"),
+                                      fit: BoxFit.fill))),
+                          onPressed: _launchURL1),
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text("Quick Note",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                decoration: TextDecoration.none)),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: height * 0.05,
+                  ),
+                  Column(
+                    children: [
+                      FlatButton(
+                          child: Container(
+                              height: height * 0.13,
+                              width: width * 0.4,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/diamond.jpg"),
+                                      fit: BoxFit.fill))),
+                          onPressed: _launchURL2),
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text("Diamond",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                decoration: TextDecoration.none)),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

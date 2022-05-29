@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:arabic_numbers/arabic_numbers.dart';
-import 'package:marquee/marquee.dart';
-import 'package:noor/colors.dart';
 import 'package:noor/counter/utilities/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -57,150 +55,154 @@ class _CounterState extends State<Counter> {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: backColor,
-          title: Text("مسبحة الكترونية",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontFamily: "MO_Nawel",
-              )),
-        ),
-        backgroundColor: backColor,
-        body: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Container(
-                  height: 50,
-                  child: Marquee(
-                    text: "نرجو الدعاء وقراءة الفاتحة على روح نورا حسني",
-                    blankSpace: 20,
-                    velocity: 40,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/s.jpg"), fit: BoxFit.fill)),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              title: Text(
+                "مسبحة الكترونية",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontFamily: "MO_Nawel",
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              elevation: 0,
+            ),
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: ListView(
+                shrinkWrap: true,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: height * .09,
+                        width: width * .5,
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.white.withOpacity(.2)),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withOpacity(.1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            counter.toString(),
+                            style: TextStyle(
+                              fontFamily: "digital-7",
+                              fontSize: 30,
+                              color: whiteColor,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),
                   Container(
-                    height: height * .09,
-                    width: width * .5,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white.withOpacity(.2)),
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withOpacity(.1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        counter.toString(),
-                        style: TextStyle(
-                            fontFamily: "digital-7",
-                            fontSize: 30,
-                            color: whiteColor),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 30),
+                    child: InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
+                      child: Container(
+                        height: height * .08,
+                        width: height * .08,
+                        decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(.2),
+                            shape: BoxShape.circle),
+                        child: Center(
+                            child: Text("إعادة",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: "MO_Nawel",
+                                ))),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          counter = 0;
+                          countsList[0].counter = 0;
+                          _save1();
+                        });
+                      },
                     ),
+                  ),
+                  SizedBox(
+                    height: height * .01,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(height * .2),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            counter++;
+                            countsList[0].counter = countsList[0].counter + 1;
+                            _save1();
+                          });
+                        },
+                        child: Container(
+                          height: height * .4,
+                          width: width * .8,
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(.3),
+                              shape: BoxShape.circle),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: height * .04,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: Container(
+                        alignment: Alignment.center,
+                        child: Text.rich(TextSpan(children: [
+                          TextSpan(
+                            text: "مجموع التسبيحات: ",
+                            style: TextStyle(
+                                fontFamily: "MO_Nawel",
+                                fontSize: height * .03,
+                                color: whiteColor),
+                          ),
+                          TextSpan(
+                            text: "${counter.toString()}",
+                            style: TextStyle(
+                                fontFamily: "digital-7",
+                                fontSize: height * .03,
+                                color: whiteColor),
+                          ),
+                        ])),
+                      )),
+                    ],
                   )
                 ],
               ),
-              SizedBox(
-                height: height * .04,
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 30),
-                child: InkWell(
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Container(
-                    height: height * .08,
-                    width: height * .08,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(.2),
-                        shape: BoxShape.circle),
-                    child: Center(
-                        child: Text("إعادة",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: "MO_Nawel",
-                            ))),
-                  ),
-                  onTap: () {
-                    setState(() {
-                      counter = 0;
-                      countsList[0].counter = 0;
-                      _save1();
-                    });
-                  },
-                ),
-              ),
-              SizedBox(
-                height: height * .01,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(height * .2),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        counter++;
-                        countsList[0].counter = countsList[0].counter + 1;
-                        _save1();
-                      });
-                    },
-                    child: Container(
-                      height: height * .4,
-                      width: width * .8,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(.3),
-                          shape: BoxShape.circle),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: height * .04,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                      child: Container(
-                    alignment: Alignment.center,
-                    child: Text.rich(TextSpan(children: [
-                      TextSpan(
-                        text: "مجموع التسبيحات: ",
-                        style: TextStyle(
-                            fontFamily: "MO_Nawel",
-                            fontSize: height * .03,
-                            color: whiteColor),
-                      ),
-                      TextSpan(
-                        text: "${counter.toString()}",
-                        style: TextStyle(
-                            fontFamily: "digital-7",
-                            fontSize: height * .03,
-                            color: whiteColor),
-                      ),
-                    ])),
-                  )),
-                ],
-              )
-            ],
+            ),
           ),
         ),
       ),

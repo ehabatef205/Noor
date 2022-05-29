@@ -7,7 +7,6 @@ class AtaytRamadan extends StatefulWidget {
 }
 
 class _AtaytRamadanState extends State<AtaytRamadan> {
-
   List<String> azkat = [
     "اللهم أهله علينا بالأمن والإيمان، والسلامة والإسلام، والعافية المجللة والرزق الواسع، ودفع الأسقام، اللهم ارزقنا صيامه وقيامه وتلاوة القرآن فيه، وسلمه لنا، وتسلّمه منا وسلمنا فيه.",
     "اللهم اجعل صيامي فيه صيام الصائمين وقيامي فيه قيام القائمين، ونبهني فيه عَن نومة الغافلين، وهب لي جرمي فيه يا رب العالمين، واعف عني يا عافيًا عن المجرمين.",
@@ -96,101 +95,114 @@ class _AtaytRamadanState extends State<AtaytRamadan> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: Container(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/s.jpg"), fit: BoxFit.fill)),
+        child: Container(
+          height: height,
+          width: width,
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/a.jpg"), fit: BoxFit.fill)),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                    height: height * 0.2,
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Text("أدعية شهر رمضان", style: TextStyle(color: Colors.white, fontSize: 18)),
-                    )),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
+          ),
+          child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                backgroundColor: Colors.transparent,
+                elevation: 1,
+                title: Text("أدعية شهر رمضان",
+                    style: TextStyle(
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(40), topLeft: Radius.circular(40)),
-                    ),
-                    padding: EdgeInsets.only(top: 15),
-                    child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemCount: azkat.length,
-                        itemBuilder: (context, index) {
-                          return Column(children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10, left: 10),
-                              child: Text(
-                                azkat[index],
-                                style: TextStyle(fontSize: 20),
-                                textDirection: TextDirection.rtl,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Container(
+                      fontSize: 30,
+                      fontFamily: "MO_Nawel",
+                    )),
+              ),
+              backgroundColor: Colors.transparent,
+              body: Container(
+                child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: azkat.length,
+                    itemBuilder: (context, index) {
+                      return Column(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10, left: 10),
+                          child: Text(
+                            azkat[index],
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Container(
+                            child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: 20),
-                                          child: RaisedButton(
-                                            color: Colors.lightBlueAccent,
-                                            textColor: Colors.black38,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(top: 20, bottom: 20),
-                                              child: Text(
-                                                count[index].toString(),
-                                                textScaleFactor: 2,
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                if (count[index] > 0) count[index]--;
-                                              });
-                                            },
-                                          ),
-                                        ),
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    color: Colors.teal,
+                                    textColor: Colors.white,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 20, bottom: 20),
+                                      child: Text(
+                                        count[index].toString(),
+                                        textScaleFactor: 2,
                                       ),
-                                      Container(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 20),
-                                          child: RaisedButton(
-                                            color: Colors.lightBlueAccent,
-                                            child: Padding(
-                                                padding: EdgeInsets.only(top: 20, bottom: 20),
-                                                child: Icon(
-                                                  Icons.refresh,
-                                                  size: 33,
-                                                  color: Colors.black38,
-                                                )),
-                                            onPressed: () {
-                                              setState(() {
-                                                count[index] = recount[index];
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (count[index] > 0) count[index]--;
+                                      });
+                                    },
                                   ),
-                                )),
-                          ]);
-                        }),
-                  ),
-                )
-              ]),
-        ));
+                                ),
+                              ),
+                              Container(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 20),
+                                  child: RaisedButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    color: Colors.teal,
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 20, bottom: 20),
+                                        child: Icon(
+                                          Icons.refresh,
+                                          size: 33,
+                                          color: Colors.white,
+                                        )),
+                                    onPressed: () {
+                                      setState(() {
+                                        count[index] = recount[index];
+                                      });
+                                    },
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                      ]);
+                    }),
+              )),
+        ),
+      ),
+    );
   }
 }

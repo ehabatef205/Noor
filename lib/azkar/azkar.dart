@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:noor/azkar/count_azkar.dart';
-import 'package:noor/colors.dart';
 
 class azkar extends StatefulWidget {
   @override
@@ -277,118 +276,136 @@ class _azkarState extends State<azkar> {
     double height = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: backColor,
-            title: Text("أذكار",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontFamily: "MO_Nawel",
-                )),
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/s.jpg"), fit: BoxFit.fill)),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
           ),
-          backgroundColor: backColor,
-          body: Center(
-            child: ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                FlatButton(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Container(
-                            height: height * 0.15,
-                            width: width * 0.3,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/images/image2.png",
+          child: Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title: Text("أذكار",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontFamily: "MO_Nawel",
+                    )),
+              ),
+              backgroundColor: Colors.transparent,
+              body: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    FlatButton(
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Container(
+                                height: height * 0.15,
+                                width: width * 0.3,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      "assets/images/image2.png",
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          )),
-                      Text("أذكار الصباح",
-                          style: TextStyle(color: Colors.white, fontSize: 18))
-                    ],
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => countAzkar(
-                                morning, count1, recount1, "أذكار الصباح")));
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                FlatButton(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Container(
-                            height: height * 0.15,
-                            width: width * 0.3,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/images/image3.png",
+                              )),
+                          Text("أذكار الصباح",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18))
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => countAzkar(morning,
+                                    count1, recount1, "أذكار الصباح")));
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    FlatButton(
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Container(
+                                height: height * 0.15,
+                                width: width * 0.3,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      "assets/images/image3.png",
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          )),
-                      Text("أذكار المساء",
-                          style: TextStyle(color: Colors.white, fontSize: 18))
-                    ],
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => countAzkar(
-                                night, count2, recount2, "أذكار المساء")));
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                FlatButton(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Container(
-                            height: height * 0.15,
-                            width: width * 0.3,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/images/image1.png",
+                              )),
+                          Text("أذكار المساء",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18))
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => countAzkar(
+                                    night, count2, recount2, "أذكار المساء")));
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    FlatButton(
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Container(
+                                height: height * 0.15,
+                                width: width * 0.3,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      "assets/images/image1.png",
+                                    ),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          )),
-                      Text("تسابيح",
-                          style: TextStyle(color: Colors.white, fontSize: 18))
-                    ],
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                countAzkar(praises, count3, recount3, "تسابيح")));
-                  },
+                              )),
+                          Text("تسابيح",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18))
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => countAzkar(
+                                    praises, count3, recount3, "تسابيح")));
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
+        ),
+      ),
     );
   }
 }

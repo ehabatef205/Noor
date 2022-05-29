@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:noor/colors.dart';
 import '../entity/Surah.dart';
 import '../quranwritten.dart';
 import 'surah_view_builder.dart';
@@ -72,112 +71,129 @@ class _SurahListBuilderState extends State<SurahListBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return WillPopScope(
       // ignore: missing_return
       onWillPop: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => quranList()));
       },
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "اختر السورة",
-            style: TextStyle(
-              fontFamily: "MO_Nawel",
-              fontSize: 30,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/s.jpg"), fit: BoxFit.fill)),
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              elevation: 0,
+              title: Text(
+                "اختر السورة",
+                style: TextStyle(
+                  fontFamily: "MO_Nawel",
+                  fontSize: 30,
+                ),
+              ),
+              backgroundColor: Colors.transparent,
+            ),
+            backgroundColor: Colors.transparent,
+            body: Column(
+              children: <Widget>[
+                /// Search field
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    cursorColor: Colors.white,
+                    onChanged: (value) {
+                      filterSearchResults(value);
+                      print(value);
+                    },
+                    controller: editingController,
+                    decoration: InputDecoration(
+                      labelText: "البحث عن سورة",
+                      labelStyle: TextStyle(color: Colors.white),
+                      // hintText: "البحث",
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          style: BorderStyle.solid,
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          style: BorderStyle.solid,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                /// ListView represent all/searched surah(s)
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: surah.length,
+                    itemExtent: 90,
+                    itemBuilder: (BuildContext context, int index) => Column(
+                      children: [
+                        ListTile(
+                            title: Text(
+                              surah[index].titleAr,
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            subtitle: Text(
+                              "عدد الأيات: ${surah[index].count}",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            leading: Image(
+                                image: AssetImage(
+                                    "assets/images/${surah[index].place}.png"),
+                                width: 30,
+                                height: 30),
+                            onTap: () {
+                              /// Push to Quran view ([int pages] represent surah page(reversed index))
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SurahViewBuilder(
+                                          pages: surah[index].pages)));
+                            }),
+                        index != surah.length - 1
+                            ? Divider(
+                                color: Colors.white.withOpacity(0.1),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          backgroundColor: backColor,
-        ),
-        backgroundColor: backColor,
-        body: Column(
-          children: <Widget>[
-            /// Search field
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-                cursorColor: Colors.white,
-                onChanged: (value) {
-                  filterSearchResults(value);
-                  print(value);
-                },
-                controller: editingController,
-                decoration: InputDecoration(
-                  labelText: "البحث عن سورة",
-                  labelStyle: TextStyle(color: Colors.white),
-                  // hintText: "البحث",
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      style: BorderStyle.solid,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      style: BorderStyle.solid,
-                      width: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            /// ListView represent all/searched surah(s)
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: surah.length,
-                itemExtent: 90,
-                itemBuilder: (BuildContext context, int index) => Column(
-                  children: [
-                    ListTile(
-                        title: Text(
-                          surah[index].titleAr,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        subtitle: Text(
-                          "عدد الأيات: ${surah[index].count}",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        leading: Image(
-                            image: AssetImage(
-                                "assets/images/${surah[index].place}.png"),
-                            width: 30,
-                            height: 30),
-                        onTap: () {
-                          /// Push to Quran view ([int pages] represent surah page(reversed index))
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SurahViewBuilder(
-                                      pages: surah[index].pages)));
-                        }),
-                    index != surah.length - 1
-                        ? Divider(
-                            color: Colors.white.withOpacity(0.1),
-                          )
-                        : Container(),
-                  ],
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
